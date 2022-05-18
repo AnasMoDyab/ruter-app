@@ -1,0 +1,27 @@
+*  {
+  box-sizing: border-box;
+}
+#root {
+  background-color: rgb(252, 245, 235);
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 450px;
+}
+
+.header {
+  color: teal
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-left: 0;
+  max-width: 1216px;
+}

@@ -1,44 +1,45 @@
+import { connect } from "http2";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { bindActionCreators } from "redux";
 import DepartureCard from "../../components/card";
 import InputText from "../../components/input/inputText";
 import RegularButton from "../../components/regularButton/regularButton";
 import { useTypedSelector } from "../../hooks/useTypedSelector";
-import { getDepartures } from "../../redux/actionCreators";
+import { fetchDeparturesRequest } from "../../redux/actions";
 
 import { EstimatedCalls } from "../../redux/reducers";
+import { RootState } from "../../redux/reducers/compbine";
 import style from "./style.module.css";
 
 const Form = () => {
   const [departure, setDeparture] = useState<string>("");
 
-  const [estimatedCalls, setEstimatedCalls] = useState<EstimatedCalls[]>();
-
   const [name, setName] = useState<string>();
   const dispatch = useDispatch();
   const { departures, loading, error } = useTypedSelector(
-    (state) => state.departures
+    (state: RootState
+    ) => state.departures
   );
   const handleChangeDeparture = (e: React.FormEvent<HTMLInputElement>) => {
     setDeparture(e.currentTarget.value);
   };
 
 
-  
 
-  const handleSubmit =async  (e: React.FormEvent<HTMLButtonElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    await dispatch(getDepartures(departure) as any);
-  
- 
+    for (var i = 0; i < 3; i++) {
+      console.log("clicked")
+       dispatch(fetchDeparturesRequest());
+    }
+   
   };
 
   useEffect(() => {
-    setEstimatedCalls(departures?.data.stopPlace.estimatedCalls);
-    setName(departures?.data.stopPlace.name);
-  }, [departure, departures])
-
- 
+   // dispatch(fetchDeparturesRequest());
+   
+  }, []);
 
   return (
     <div>
@@ -65,24 +66,29 @@ const Form = () => {
           />
         </form>
 
-        {loading && <div>...laste opp data</div>}
+        {loading ? (
+          <div>...laste opp data</div>
+        ) : error ? (
+          <div>{error}</div>
+        ) : (
+          <div className={style.cardWrapper}>
+            {departures?.data?.stopPlace?.estimatedCalls &&
+              departures?.data?.stopPlace?.estimatedCalls?.map((item, index) => (
+                <div key={index}>
+                  <DepartureCard
+                    aimedArrivalTime={item?.aimedArrivalTime}
+                    aimedDepartureTime={item?.aimedDepartureTime}
+                    expectedDepartureTime={item?.expectedDepartureTime}
+                    expectedArrivalTime={item?.expectedDepartureTime}
+                    serviceJourney={item?.serviceJourney}
+                    date={item?.date}
+                    destinationDisplayName={item?.desitnationDisplay}
+                  />
+                </div>
+              ))}
+          </div>
+        )}
         {error && <div className={style.errorMessage}>{error}</div>}
-      </div>
-      <div className={style.cardWrapper}>
-        {estimatedCalls?.length &&
-          estimatedCalls?.map((item, index) => (
-            <div key={index}>
-              <DepartureCard
-                aimedArrivalTime={item?.aimedArrivalTime}
-                aimedDepartureTime={item?.aimedDepartureTime}
-                expectedDepartureTime={item?.expectedDepartureTime}
-                expectedArrivalTime={item?.expectedDepartureTime}
-                serviceJourney={item?.serviceJourney}
-                date={item?.date}
-                destinationDisplayName={item?.desitnationDisplay}
-              />
-            </div>
-          ))}
       </div>
     </div>
   );

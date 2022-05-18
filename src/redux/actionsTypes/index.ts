@@ -7,16 +7,16 @@ export enum ActionType {
     POST_DEPARTURES_FAIL = 'POST_DEPARTURES_FAIL'
 }
 
-interface actionPending {
+export interface actionPending {
     type: ActionType.POST_DEPARTURES_PENDING
 }
 
-interface actionSuccess {
+export interface actionSuccess {
     type: ActionType.POST_DEPARTURES_SUCCESS;
     payload: Departure;
 }
 
-interface actionFail {
+export interface actionFail {
     type: ActionType.POST_DEPARTURES_FAIL;
     payload: string;
 }

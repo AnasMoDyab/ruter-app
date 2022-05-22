@@ -5,9 +5,8 @@ function App() {
   return (
     <div className={style.wrapper}>
       <div className={style.container}>
-        <h1 className={style.header}>Ruter app</h1>
+        <h1 className={style.header}>#Ruter app</h1>
         <div className={style.formsWrapper}>
-          <Form />
           <Form />
         </div>
       </div>
